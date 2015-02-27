@@ -1,0 +1,25 @@
+%h1 Listing celebrities
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th National
+      %th Domain
+      %th
+      %th
+      %th
+      
+  %tbody
+    - @celebrities.each do |celebrity|
+      %tr
+        %td= celebrity.name
+        %td= celebrity.national
+        %td= celebrity.domain
+        %td= link_to 'Show', celebrity
+        %td= link_to 'Edit', edit_celebrity_path(celebrity)
+        %td= link_to 'Destroy', celebrity, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Celebrity', new_celebrity_path

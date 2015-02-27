@@ -1,0 +1,10 @@
+= simple_form_for(@celebrity) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :national
+    = f.input :domain
+
+  .form-actions
+    = f.button :submit
