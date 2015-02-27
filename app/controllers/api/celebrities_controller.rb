@@ -1,30 +1,44 @@
 class Api::CelebritiesController < ApplicationController
+  protect_from_forgery with: :null_session
+
   before_action :set_celebrity, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
 
   def index
     @celebrities = Celebrity.all
-    rendre json: @celebrities
+    render json: @celebrities
   end
 
   def show
-    respond_with(@celebrity)
+    @celebrity = Celebrity.where(id: params[:id])
+    render json: @celebrity
   end
 
   def create
     @celebrity = Celebrity.new(celebrity_params)
-    @celebrity.save
-    respond_with(@celebrity)
+    if @celebrity.save
+      render json: @celebrity
+    else
+      render json: { :message => "Can not create celebrity "}
+    end
   end
 
   def update
-    @celebrity.update(celebrity_params)
-    respond_with(@celebrity)
+     @celebrity = Celebrity.find(params[:id])
+    if @celebrity.update_attributes(celebrity_params)
+      redirect_to celebrities_path, :notice => "User updated."
+    else
+      redirect_to celebrities_path, :alert => "Unable to update user."
+    end
   end
 
-  def destroy
-    @celebrity.destroy
-    respond_with(@celebrity)
-  end
+  private
+    def set_celebrity
+      @celebrity = Celebrity.find(params[:id])
+    end
+
+    def celebrity_params
+      params.require(:celebrity).permit(:name, :national, :domain)
+    end
 end
